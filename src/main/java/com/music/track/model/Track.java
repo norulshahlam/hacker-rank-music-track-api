@@ -1,5 +1,6 @@
 package com.music.track.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import jakarta.persistence.*;
 
 import java.util.Date;

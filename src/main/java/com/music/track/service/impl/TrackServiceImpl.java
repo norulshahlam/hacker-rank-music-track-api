@@ -2,28 +2,46 @@ package com.music.track.service.impl;
 
 import com.music.track.dto.TrackRequest;
 import com.music.track.model.Track;
+import com.music.track.repository.TrackRepository;
 import com.music.track.service.TrackService;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
 public class TrackServiceImpl implements TrackService {
+    private final TrackRepository trackRepository;
+
+    public TrackServiceImpl(TrackRepository trackRepository) {
+        this.trackRepository = trackRepository;
+    }
+
     @Override
     public Track createTrack(TrackRequest trackRequest) {
-        return null;
+        Track track = new Track();
+        track.setTitle(trackRequest.title());
+        track.setAlbumName(trackRequest.albumName());
+        track.setReleaseDate(trackRequest.releaseDate());
+        track.setPlayCount(trackRequest.playCount());
+        return trackRepository.save(track);
     }
+
     @Override
     public List<Track> getAllTracks() {
-        return null;
+        return trackRepository.findAll();
     }
 
     @Override
     public void deleteTrack(Long trackId) {
+        trackRepository.deleteById(trackId);
     }
 
     @Override
     public List<Track> sortedTracks() {
-        return null;
+        return trackRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(Track::getTitle, Comparator.nullsLast(String::compareTo)))
+                .toList();
     }
 }
